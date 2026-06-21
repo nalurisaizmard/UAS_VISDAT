@@ -1095,30 +1095,25 @@ def make_detail_table(df, limit=200):
               "nepal":"Nepal","total_import":"Total Impor (MW)","gap_demand_generation":"Gap D-G (MW)",
               "remarks":"Kategori"}
     dff = df.sort_values("datetime", ascending=False)[show].head(limit).copy()
+    # Format kolom datetime jadi STRING tanggal rapi (bukan angka epoch mentah)
+    if "datetime" in dff.columns:
+        dff["datetime"] = pd.to_datetime(dff["datetime"]).dt.strftime("%d %b %Y %H:%M")
+
+    columns = []
+    for c in dff.columns:
+        width = 160 if c == "datetime" else 110
+        columns.append(TableColumn(field=c, title=labels.get(c, c), width=width))
+
     return DataTable(
             source=ColumnDataSource(dff),
-
-            columns=[
-                TableColumn(
-                    field=c,
-                    title=labels.get(c, c)
-                )
-                for c in dff.columns
-            ],
-
+            columns=columns,
             height=420,
-
             sizing_mode="stretch_width",
-
             index_position=None,
-
             reorderable=False,
-
             sortable=True,
-
             selectable=True
         )
-
 
 def make_dashboard_tabs(overview_layout, energy_layout, peak_layout, detail_layout):
 
