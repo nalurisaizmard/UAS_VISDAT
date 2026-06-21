@@ -1094,7 +1094,7 @@ def make_detail_table(df, limit=200):
               "india_bheramara_hvdc":"Bheramara HVDC","india_tripura":"Tripura","india_adani":"Adani",
               "nepal":"Nepal","total_import":"Total Impor (MW)","gap_demand_generation":"Gap D-G (MW)",
               "remarks":"Kategori"}
-    dff = df[show].head(limit).copy()
+    dff = df.sort_values("datetime", ascending=False)[show].head(limit).copy()
     return DataTable(
             source=ColumnDataSource(dff),
 
